@@ -52,12 +52,14 @@ class App:
         self.birdy = 900
 
         self.snake = pygame.image.load('snake.png')
+        self.snakeDead = pygame.image.load('snakeDead.png')
         self.snakex = random.randint(0, 9) * 100
         self.snakey = random.randint(0, 9) * 100
 
         self.cmdStack = []
         
         self.running = True
+        self.isSnakeDead = False
 
         self.run()
         
@@ -116,6 +118,9 @@ class App:
             elif event.key == pygame.K_DOWN:
                 if self.birdy < 900:
                     self.birdy += 100
+            
+            if self.birdx == self.snakex and self.birdy == self.snakey:
+                self.isSnakeDead = True
     
     def loop(self):
         pass#print("loop")
@@ -129,7 +134,10 @@ class App:
                 else:
                     pygame.draw.rect(self.displaySurf, self.darkGreen, pygame.Rect(row * 100, col * 100, 100, 100))
 
-        self.displaySurf.blit(self.snake, (self.snakex, self.snakey))
+        if self.isSnakeDead:
+            self.displaySurf.blit(self.snakeDead, (self.snakex, self.snakey))
+        else:
+            self.displaySurf.blit(self.snake, (self.snakex, self.snakey))
 
         self.displaySurf.blit(self.bird, (self.birdx, self.birdy))
         pygame.display.flip()
@@ -159,6 +167,7 @@ class App:
                     self.render()
             
             pygame.time.wait(1000)
+            pygame.event.get()
 
     
     def quit(self):
